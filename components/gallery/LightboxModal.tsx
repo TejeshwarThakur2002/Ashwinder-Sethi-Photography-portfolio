@@ -2,7 +2,7 @@
 
 import { useEffect, useCallback, useRef } from 'react';
 import type { GalleryPhoto } from '@/lib/types';
-import { X, ChevronLeft, ChevronRight, MapPin, Camera, Aperture } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, MapPin, Aperture, Focus, Calendar } from 'lucide-react';
 
 /**
  * LightboxModal Component
@@ -175,10 +175,10 @@ export default function LightboxModal({
             )}
             {photo.camera && (
               <>
-                {photo.camera.brand && (
+                {photo.camera.lens && (
                   <span className="flex items-center gap-1">
-                    <Camera className="h-4 w-4" />
-                    {photo.camera.brand}
+                    <Focus className="h-4 w-4" />
+                    {photo.camera.lens}
                   </span>
                 )}
                 {photo.camera.aperture && (
@@ -190,6 +190,12 @@ export default function LightboxModal({
                 {photo.camera.shutterSpeed && <span>{photo.camera.shutterSpeed}</span>}
                 {photo.camera.iso && <span>ISO {photo.camera.iso}</span>}
               </>
+            )}
+            {photo.captureDate && (
+              <span className="flex items-center gap-1">
+                <Calendar className="h-4 w-4" />
+                {new Date(photo.captureDate).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}
+              </span>
             )}
           </div>
 
