@@ -1,0 +1,19 @@
+# Robots.txt for Ashwinder Sethi Photography
+# https://ashwindersethi.com
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /booking/summary/
+Disallow: /booking/confirmation/
+Disallow: /_next/
+Disallow: /private/
+
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /booking/summary/
+Disallow: /booking/confirmation/
+
+Sitemap: https://ashwindersethi.com/sitemap.xml
+Host: https://ashwindersethi.com
