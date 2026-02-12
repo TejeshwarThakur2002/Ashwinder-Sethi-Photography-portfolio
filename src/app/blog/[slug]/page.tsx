@@ -182,10 +182,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <ShareButtons url={canonicalUrl} title={post.title} />
 
             <Link
-              href="/services"
+              href="/contact"
               className="inline-flex items-center gap-2 rounded-full bg-[#DC2626] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#DC2626]/90"
             >
-              Book a Session
+              Get in Touch
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

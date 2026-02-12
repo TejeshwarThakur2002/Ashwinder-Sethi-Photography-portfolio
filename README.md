@@ -1,16 +1,14 @@
 # Ashwinder Sethi Photography – Frontend
 
-A premium photography portfolio, storytelling blog, and booking platform built with Next.js.
+A premium photography portfolio and storytelling blog built with Next.js and Sanity CMS.
 
 ## Tech Stack
 
 - **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS 4
-- **CMS**: Sanity (planned)
-- **Database/Auth**: Supabase (planned)
-- **Payments**: Stripe (planned)
-- **Hosting**: Firebase Hosting (planned)
+- **CMS**: Sanity Studio (embedded at `/studio`)
+- **Hosting**: Firebase Hosting
 
 ## Prerequisites
 
@@ -48,7 +46,22 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see the placeholder page.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
+
+### Required Environment Variables
+
+See [`.env.example`](.env.example) for the full list. Key variables:
+
+| Variable | Scope | Description |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Public | Sanity project ID |
+| `NEXT_PUBLIC_SANITY_DATASET` | Public | Sanity dataset (e.g. `production`) |
+| `NEXT_PUBLIC_SANITY_API_VERSION` | Public | Sanity API version |
+| `SANITY_WRITE_TOKEN` | Server-only | Write token for contact form submissions |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Public | Google Analytics 4 measurement ID |
+| `NEXT_PUBLIC_SITE_URL` | Public | Canonical site URL for SEO/OG images |
+
+> **Warning**: Never commit `.env.local` — it is gitignored. Only `.env.example` (with placeholder values) should be tracked.
 
 ## Available Scripts
 
@@ -95,7 +108,21 @@ ashwinder-photography-frontend/
 
 ## Deployment
 
-This project is designed for Firebase Hosting / Firebase App Hosting. Deployment instructions will be added as the project progresses.
+### Firebase Hosting
+
+```bash
+# Build and deploy in one step
+npm run deploy
+
+# Or deploy to a preview channel
+npm run deploy:preview
+```
+
+Make sure `firebase.json` is configured and you are authenticated via `firebase login`.
+
+### Other Hosts
+
+Any platform that supports Next.js (Vercel, Netlify, etc.) can deploy this project. Set the environment variables listed above in the host's dashboard.
 
 ## License
 

@@ -42,9 +42,9 @@ export default function NotFound() {
                 Go Home
               </Button>
             </Link>
-            <Link href="/services">
+            <Link href="/gallery">
               <Button variant="secondary" size="lg" leftIcon={<Camera className="h-4 w-4" />}>
-                View Services
+                View Gallery
               </Button>
             </Link>
           </div>
