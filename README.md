@@ -106,21 +106,103 @@ ashwinder-photography-frontend/
 
 - [Project Notes](./docs/project-notes.md) – Summary of project scope and requirements
 
-## Deployment
+## Deployment (Firebase Hosting)
 
-### Firebase Hosting
+This project deploys to **Firebase Hosting** using the [web frameworks](https://firebase.google.com/docs/hosting/frameworks/nextjs) integration, which runs Next.js SSR via Cloud Functions. This is required because the app has server-side routes (`/api/contact`, `/studio`).
+
+### Prerequisites
 
 ```bash
-# Build and deploy in one step
+npm install -g firebase-tools   # Install Firebase CLI (once)
+firebase login                  # Authenticate (once)
+firebase experiments:enable webframeworks   # Enable Next.js support (once)
+```
+
+### Firebase project binding
+
+The repo is bound to project `ashwinder-sethi-portfolio` via `.firebaserc`. To change it:
+
+```bash
+firebase projects:list          # See your projects
+firebase use --add              # Select a different project; use alias "default"
+```
+
+### Environment variables
+
+Copy `.env.example` to `.env.production` and fill in real values:
+
+```bash
+cp .env.example .env.production
+```
+
+| Variable | Required | Scope | Description |
+| --- | --- | --- | --- |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Yes | Public | Sanity project ID |
+| `NEXT_PUBLIC_SANITY_DATASET` | Yes | Public | Sanity dataset (e.g. `production`) |
+| `NEXT_PUBLIC_SANITY_API_VERSION` | No | Public | Sanity API version (defaults to `2024-01-01`) |
+| `SANITY_WRITE_TOKEN` | Yes | **Secret** | Server-only write token for `/api/contact` |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Recommended | Public | Google Analytics 4 measurement ID |
+| `NEXT_PUBLIC_SITE_URL` | Recommended | Public | Canonical URL (e.g. `https://<project>.web.app`) |
+
+> **Warning**: `.env.production` is gitignored and must never be committed. Only `.env.example` (placeholder values) is tracked.
+
+Next.js loads `.env.production` automatically during `next build`, and Firebase's web frameworks integration runs the build as part of `firebase deploy`.
+
+### Local deploy (CLI)
+
+```bash
+# One-time: initialize hosting if you haven't already
+firebase init hosting
+# → Accept the detected Next.js framework when prompted
+
+# Deploy (builds + deploys in one step)
 npm run deploy
 
 # Or deploy to a preview channel
 npm run deploy:preview
 ```
 
-Make sure `firebase.json` is configured and you are authenticated via `firebase login`.
+Your site will be live at `https://<project-id>.web.app`.
 
-### Other Hosts
+### GitHub Actions deploy (optional)
+
+1. **Connect repo** — In Firebase Console → Hosting, click "Set up GitHub integration". Firebase auto-creates a workflow file and a service account secret.
+
+2. **Add secrets** — In GitHub → repo Settings → Secrets → Actions, create:
+   - `NEXT_PUBLIC_SANITY_PROJECT_ID`
+   - `NEXT_PUBLIC_SANITY_DATASET`
+   - `NEXT_PUBLIC_SANITY_API_VERSION`
+   - `SANITY_WRITE_TOKEN`
+   - `NEXT_PUBLIC_GA_MEASUREMENT_ID`
+   - `NEXT_PUBLIC_SITE_URL`
+
+3. **Wire secrets into the workflow** — Edit the generated `.github/workflows/firebase-hosting-merge.yml` and add an `env:` block to the build step:
+
+   ```yaml
+   - name: Build
+     run: npm run build
+     env:
+       NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+       NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
+       NEXT_PUBLIC_SANITY_API_VERSION: ${{ secrets.NEXT_PUBLIC_SANITY_API_VERSION }}
+       SANITY_WRITE_TOKEN: ${{ secrets.SANITY_WRITE_TOKEN }}
+       NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
+       NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+   ```
+
+4. Push to `main` — the action builds and deploys automatically.
+
+### Sanity CORS
+
+After your first deploy, add your Firebase Hosting domain(s) to Sanity's allowed CORS origins:
+
+1. Go to [manage.sanity.io](https://manage.sanity.io) → your project → API → CORS origins.
+2. Add `https://<project-id>.web.app` (and any custom domain).
+3. Enable **Allow credentials** if you use authenticated Studio requests.
+
+This is required for Sanity Studio at `/studio` to work on the deployed domain.
+
+### Other hosts
 
 Any platform that supports Next.js (Vercel, Netlify, etc.) can deploy this project. Set the environment variables listed above in the host's dashboard.
 

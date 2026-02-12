@@ -10,8 +10,8 @@
     "lint:fix": "eslint --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "deploy": "npm run build && firebase deploy",
-    "deploy:preview": "npm run build && firebase hosting:channel:deploy preview"
+    "deploy": "firebase deploy",
+    "deploy:preview": "firebase hosting:channel:deploy preview"
   },
   "dependencies": {
     "@portabletext/react": "^6.0.2",
@@ -21,10 +21,10 @@
     "caniuse-lite": "^1.0.30001769",
     "framer-motion": "^12.23.25",
     "lucide-react": "^0.555.0",
-    "next": "16.0.6",
+    "next": "^16.0.7",
     "next-sanity": "^12.1.0",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "sanity": "^5.9.0",
     "styled-components": "^6.3.9"
   },
@@ -35,7 +35,7 @@
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
-    "eslint-config-next": "16.0.6",
+    "eslint-config-next": "^16.0.7",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.7.4",
