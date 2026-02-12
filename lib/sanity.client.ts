@@ -14,6 +14,7 @@ export const sanityClient = createClient({
   dataset,
   apiVersion,
   useCdn: true,
+  fetch: { next: { revalidate: 0 } },
 });
 
 /** Image URL builder instance */
