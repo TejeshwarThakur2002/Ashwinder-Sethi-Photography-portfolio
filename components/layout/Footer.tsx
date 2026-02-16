@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Instagram, Mail, MapPin, Phone } from 'lucide-react';
+import { Instagram, Mail } from 'lucide-react';
 
 /**
  * Site Footer Component
@@ -83,15 +83,6 @@ export default function Footer() {
             <ul className="mt-4 space-y-3">
               <li>
                 <a
-                  href="tel:+919915200824"
-                  className="inline-flex items-center gap-2 text-sm text-[#F5F5F5]/60 transition-colors hover:text-[#DC2626]"
-                >
-                  <Phone className="h-4 w-4" />
-                  +91 9915200824
-                </a>
-              </li>
-              <li>
-                <a
                   href="https://instagram.com/ashwinder.sethi"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -109,18 +100,6 @@ export default function Footer() {
                   <Mail className="h-4 w-4" />
                   ashwindersethis@gmail.com
                 </a>
-              </li>
-              <li>
-                <span className="inline-flex items-start gap-2 text-sm text-[#F5F5F5]/60">
-                  <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                  <span>
-                    Shoot Studio, F-9 Oasis Complex,
-                    <br />
-                    Guru Nanak Bhawan, Ludhiana,
-                    <br />
-                    Punjab, 141001
-                  </span>
-                </span>
               </li>
             </ul>
           </div>

@@ -1,15 +1,12 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { ArrowRight, Camera, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { heroImages, getNextIndex, getPrevIndex } from '@/lib/heroImages';
 import {
   ANIMATION_CONFIG,
   heroImageVariants,
-  heroTextContainer,
-  heroTextItem,
 } from '@/lib/animations';
 
 /**
@@ -121,63 +118,6 @@ export default function Hero() {
       >
         <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
       </button>
-
-      {/* Content */}
-      <motion.div
-        className="relative z-10 mx-auto max-w-7xl px-4 py-32 text-center sm:px-6 lg:px-8"
-        variants={heroTextContainer}
-        initial="hidden"
-        animate="visible"
-      >
-        {/* Icon badge */}
-        <motion.div
-          className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 backdrop-blur-2xl"
-          variants={heroTextItem}
-        >
-          <Camera className="h-4 w-4 text-[#DC2626]" />
-          <span className="text-sm font-medium text-[#F5F5F5]/80">
-            Wildlife & Landscape Photography
-          </span>
-        </motion.div>
-
-        {/* Main Heading */}
-        <motion.h1
-          className="font-playfair text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
-          variants={heroTextItem}
-        >
-          Ashwinder Sethi
-          <span className="mt-2 block text-[#DC2626]">Photography</span>
-        </motion.h1>
-
-        {/* Tagline */}
-        <motion.p
-          className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#F5F5F5]/70 sm:text-xl"
-          variants={heroTextItem}
-        >
-          Capturing the raw beauty of nature through a cinematic lens. Wildlife encounters,
-          breathtaking landscapes, and stories that inspire.
-        </motion.p>
-
-        {/* CTAs */}
-        <motion.div
-          className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6"
-          variants={heroTextItem}
-        >
-          <Link
-            href="/gallery"
-            className="group inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-8 py-4 text-base font-medium text-white backdrop-blur-2xl transition-all hover:bg-white/25 hover:border-white/30 hover:shadow-lg hover:shadow-white/10"
-          >
-            View Gallery
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-8 py-4 text-base font-medium text-white backdrop-blur-xl transition-all hover:bg-white/15 hover:border-white/20"
-          >
-            Get in Touch
-          </Link>
-        </motion.div>
-      </motion.div>
 
       {/* Slide Pagination Dots - subtle on mobile */}
       <div

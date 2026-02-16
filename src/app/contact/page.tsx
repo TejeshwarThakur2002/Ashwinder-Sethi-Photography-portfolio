@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Header, Footer } from '@/components/layout';
 import { SectionHeading } from '@/components/ui';
-import { ContactForm, StudioInfoPanel, LocationSection } from '@/components/contact';
+import { ContactForm, StudioInfoPanel } from '@/components/contact';
 import { PAGE_METADATA, generatePageMetadata } from '@/lib/seoConfig';
 import { JsonLd, generateLocalBusinessSchema } from '@/lib/structuredData';
 
@@ -60,9 +60,6 @@ export default function ContactPage() {
               </aside>
             </div>
           </section>
-
-          {/* Location Section */}
-          <LocationSection />
         </div>
       </main>
       <Footer />
