@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Header, Footer } from '@/components/layout';
 import { GalleryContent } from '@/components/gallery';
 import { PAGE_METADATA, generatePageMetadata } from '@/lib/seoConfig';
@@ -37,7 +38,9 @@ export default async function GalleryPage() {
           {/* Gallery Content - Client Component with header, filtering and lightbox */}
           <div className="mt-4">
             {photos.length > 0 ? (
-              <GalleryContent photos={photos} />
+              <Suspense fallback={<div className="text-center text-white/50">Loading gallery...</div>}>
+                <GalleryContent photos={photos} />
+              </Suspense>
             ) : (
               <div className="flex min-h-[300px] items-center justify-center rounded-lg border border-dashed border-[#DC2626]/20 bg-[#1C1C1C]/50">
                 <p className="text-center text-[#F5F5F5]/50">
