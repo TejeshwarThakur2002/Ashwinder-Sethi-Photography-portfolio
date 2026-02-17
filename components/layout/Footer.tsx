@@ -32,12 +32,12 @@ export default function Footer() {
               href="/"
               className="font-playfair text-2xl font-semibold tracking-tight text-white"
             >
-              Shoot Studio
+              Ashwinder Sethi
             </Link>
-            <p className="text-sm text-[#F5F5F5]/50">by Ashwinder Sethi</p>
+            <p className="text-sm text-[#F5F5F5]/50">Fine Art & Wildlife Photographer</p>
             <p className="mt-4 text-sm leading-relaxed text-[#F5F5F5]/60">
-              Premium photography studio in Ludhiana offering professional shoots, studio rentals,
-              podcast production, and one-on-one coaching.
+              Indian fine art and wildlife photographer capturing the serenity of nature through
+              minimalist compositions and celebrating the beauty of the wild.
             </p>
             {/* Social Links */}
             <div className="mt-6 flex gap-4">
@@ -109,7 +109,7 @@ export default function Footer() {
         <div className="mt-12 border-t border-[#1C1C1C] pt-8">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <p className="text-sm text-[#F5F5F5]/40">
-              © {currentYear} Shoot Studio by Ashwinder Sethi. All rights reserved.
+              © {currentYear} Ashwinder Sethi. All rights reserved.
             </p>
             <div className="flex gap-6">
               <Link

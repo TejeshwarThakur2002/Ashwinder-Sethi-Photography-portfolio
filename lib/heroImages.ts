@@ -7,6 +7,7 @@
 export interface HeroImage {
   id: string;
   src: string;
+  mobileSrc?: string;
   alt: string;
   caption?: string;
 }
@@ -20,30 +21,35 @@ export const heroImages: HeroImage[] = [
   {
     id: 'hero-1',
     src: '/images/gallery/3K9A1765-Enhanced-NR.jpg',
+    mobileSrc: '/mobilescreen-carousel-img/carousel1.jpg',
     alt: 'Cinematic portrait with dramatic lighting',
     caption: 'Portrait',
   },
   {
     id: 'hero-2',
     src: '/images/gallery/3K6A6628.jpg',
+    mobileSrc: '/mobilescreen-carousel-img/carousel2.jpg',
     alt: 'Professional studio photography session',
     caption: 'Studio',
   },
   {
     id: 'hero-3',
     src: '/images/gallery/059A0263-Enhanced-NR.jpg',
+    mobileSrc: '/mobilescreen-carousel-img/carousel3.jpg',
     alt: 'Golden hour portrait photography',
     caption: 'Golden Hour',
   },
   {
     id: 'hero-4',
     src: '/images/gallery/3K9A3682-Enhanced-NR.jpg',
+    mobileSrc: '/mobilescreen-carousel-img/carousel4.jpg',
     alt: 'Fashion photography with artistic flair',
     caption: 'Fashion',
   },
   {
     id: 'hero-5',
     src: '/images/gallery/3K9A4867-Enhanced-NR.jpg',
+    mobileSrc: '/mobilescreen-carousel-img/carousel5.jpg',
     alt: 'Creative portrait with unique composition',
     caption: 'Creative',
   },

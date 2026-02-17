@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import type { GalleryPhoto, GalleryCategory } from '@/lib/types';
 import { GalleryFilters, LightboxModal } from './index';
 import GalleryExploreGrid from './GalleryExploreGrid';
@@ -34,8 +35,13 @@ function buildCategories(photos: GalleryPhoto[]): GalleryCategory[] {
 }
 
 export default function GalleryContent({ photos }: GalleryContentProps) {
+  const searchParams = useSearchParams();
+  
+  // Get category from URL query parameter
+  const categoryParam = searchParams.get('category');
+  
   // State for active category filter
-  const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [activeCategory, setActiveCategory] = useState<string>(categoryParam || 'all');
 
   // State for lightbox
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryPhoto | null>(null);
@@ -45,6 +51,15 @@ export default function GalleryContent({ photos }: GalleryContentProps) {
 
   // Derive categories from the photos array
   const categories = useMemo(() => buildCategories(photos), [photos]);
+
+  // Update active category when URL changes
+  useEffect(() => {
+    if (categoryParam) {
+      setActiveCategory(categoryParam);
+    } else {
+      setActiveCategory('all');
+    }
+  }, [categoryParam]);
 
   // Filter photos based on selected category
   const filteredPhotos = useMemo(() => {
@@ -130,8 +145,29 @@ export default function GalleryContent({ photos }: GalleryContentProps) {
         </p>
       </div>
 
-      {/* Instagram Explore–style mosaic grid */}
-      <GalleryExploreGrid photos={filteredPhotos} onPhotoClick={handlePhotoClick} />
+      {/* Instagram Explore–style mosaic grid or empty state */}
+      {filteredPhotos.length > 0 ? (
+        <GalleryExploreGrid photos={filteredPhotos} onPhotoClick={handlePhotoClick} />
+      ) : (
+        <div className="flex min-h-[400px] items-center justify-center rounded-lg border border-dashed border-[#DC2626]/20 bg-[#1C1C1C]/50">
+          <div className="text-center">
+            <p className="text-lg font-medium text-[#F5F5F5]/70">
+              No photos in this category yet
+            </p>
+            <p className="mt-2 text-sm text-[#F5F5F5]/50">
+              {activeCategory !== 'all' && (
+                <>
+                  No photos have been posted in{' '}
+                  <span className="text-[#DC2626]">
+                    {categories.find((c) => c.id === activeCategory)?.label}
+                  </span>
+                  {' '}yet.
+                </>
+              )}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Lightbox Modal */}
       <LightboxModal

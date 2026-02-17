@@ -1,36 +1,19 @@
 'use client';
 
-import { useState, FormEvent, ChangeEvent, useRef, useEffect } from 'react';
-import { Send, CheckCircle, ChevronDown, Check } from 'lucide-react';
+import { useState, FormEvent, ChangeEvent } from 'react';
+import { Send, CheckCircle } from 'lucide-react';
 import { Button, useToast } from '@/components/ui';
-import DatePicker from './DatePicker';
-import TimePicker from './TimePicker';
 
 /**
  * Contact Form Component
  * Handles form state, validation, and submission via /api/contact → Sanity
  */
 
-// Service options matching the studio services
-const SERVICE_OPTIONS = [
-  { value: '', label: 'Select a service...' },
-  { value: 'fashion', label: 'Fashion Photography' },
-  { value: 'portrait', label: 'Portrait Photography' },
-  { value: 'food-beverages', label: 'Food & Beverages' },
-  { value: 'product', label: 'Product Shoot' },
-  { value: 'talk-show', label: 'Talk Show' },
-  { value: 'rental', label: 'Rental Studio' },
-  { value: 'other', label: 'Other / Not Sure' },
-];
-
 // Form data interface
 export interface ContactFormData {
   name: string;
   email: string;
   phone: string;
-  service: string;
-  preferredDate: string;
-  preferredTime: string;
   message: string;
 }
 
@@ -46,9 +29,6 @@ const initialFormData: ContactFormData = {
   name: '',
   email: '',
   phone: '',
-  service: '',
-  preferredDate: '',
-  preferredTime: '',
   message: '',
 };
 
@@ -59,29 +39,6 @@ export default function ContactForm() {
   const [formData, setFormData] = useState<ContactFormData>(initialFormData);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle');
-  const [isServiceDropdownOpen, setIsServiceDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsServiceDropdownOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  // Get selected service label
-  const selectedServiceLabel =
-    SERVICE_OPTIONS.find((opt) => opt.value === formData.service)?.label || 'Select a service...';
-
-  // Handle service selection
-  const handleServiceSelect = (value: string) => {
-    setFormData((prev) => ({ ...prev, service: value }));
-    setIsServiceDropdownOpen(false);
-  };
 
   // Handle input changes
   const handleChange = (
@@ -243,106 +200,21 @@ export default function ContactForm() {
         </div>
       </div>
 
-      {/* Phone & Service Row */}
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Phone */}
-        <div>
-          <label htmlFor="phone" className="mb-2 block text-sm font-medium text-[#F5F5F5]/80">
-            Phone <span className="text-[#F5F5F5]/40">(optional)</span>
-          </label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="+91 98765 43210"
-            className={`${inputBaseStyles} ${inputNormalStyles}`}
-            disabled={submitStatus === 'submitting'}
-          />
-        </div>
-
-        {/* Service - Custom Dropdown */}
-        <div ref={dropdownRef} className="relative">
-          <label id="service-label" className="mb-2 block text-sm font-medium text-[#F5F5F5]/80">
-            Preferred Service <span className="text-[#F5F5F5]/40">(optional)</span>
-          </label>
-          <button
-            type="button"
-            onClick={() => setIsServiceDropdownOpen(!isServiceDropdownOpen)}
-            disabled={submitStatus === 'submitting'}
-            aria-haspopup="listbox"
-            aria-expanded={isServiceDropdownOpen}
-            aria-labelledby="service-label"
-            className={`${inputBaseStyles} ${inputNormalStyles} flex cursor-pointer items-center justify-between text-left`}
-          >
-            <span className={formData.service ? 'text-white' : 'text-[#F5F5F5]/40'}>
-              {selectedServiceLabel}
-            </span>
-            <ChevronDown
-              className={`h-5 w-5 text-[#F5F5F5]/40 transition-transform duration-200 ${
-                isServiceDropdownOpen ? 'rotate-180' : ''
-              }`}
-            />
-          </button>
-
-          {/* Dropdown Menu */}
-          {isServiceDropdownOpen && (
-            <ul
-              role="listbox"
-              aria-labelledby="service-label"
-              className="absolute z-50 mt-2 w-full overflow-hidden rounded-lg border border-white/10 bg-[#1C1C1C] shadow-xl shadow-black/30"
-            >
-              {SERVICE_OPTIONS.map((option, index) => (
-                <li
-                  key={option.value}
-                  role="option"
-                  aria-selected={formData.service === option.value}
-                  onClick={() => handleServiceSelect(option.value)}
-                  className={`flex cursor-pointer items-center justify-between px-4 py-3 transition-colors ${
-                    index === 0 ? 'border-b border-white/5' : ''
-                  } ${
-                    formData.service === option.value
-                      ? 'bg-[#DC2626]/10 text-[#DC2626]'
-                      : 'text-[#F5F5F5]/80 hover:bg-white/5 hover:text-white'
-                  }`}
-                >
-                  <span>{option.label}</span>
-                  {formData.service === option.value && (
-                    <Check className="h-4 w-4 text-[#DC2626]" />
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-
-      {/* Date & Time Row */}
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Preferred Date */}
-        <div>
-          <label className="mb-2 block text-sm font-medium text-[#F5F5F5]/80">
-            Preferred Date <span className="text-[#F5F5F5]/40">(optional)</span>
-          </label>
-          <DatePicker
-            value={formData.preferredDate}
-            onChange={(date) => setFormData((prev) => ({ ...prev, preferredDate: date }))}
-            disabled={submitStatus === 'submitting'}
-          />
-        </div>
-
-        {/* Preferred Time */}
-        <div>
-          <label className="mb-2 block text-sm font-medium text-[#F5F5F5]/80">
-            Preferred Time <span className="text-[#F5F5F5]/40">(optional)</span>
-          </label>
-          <TimePicker
-            value={formData.preferredTime}
-            onChange={(time) => setFormData((prev) => ({ ...prev, preferredTime: time }))}
-            disabled={submitStatus === 'submitting'}
-          />
-        </div>
+      {/* Phone */}
+      <div>
+        <label htmlFor="phone" className="mb-2 block text-sm font-medium text-[#F5F5F5]/80">
+          Phone <span className="text-[#F5F5F5]/40">(optional)</span>
+        </label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          value={formData.phone}
+          onChange={handleChange}
+          placeholder="+91 98765 43210"
+          className={`${inputBaseStyles} ${inputNormalStyles}`}
+          disabled={submitStatus === 'submitting'}
+        />
       </div>
 
       {/* Message */}

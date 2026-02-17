@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Header, Footer } from '@/components/layout';
 import {
   AboutHero,
-  AboutHighlights,
   AboutStorySection,
   JourneyTimeline,
   PhilosophySection,
@@ -34,9 +33,6 @@ export default function AboutPage() {
       <main id="main-content" className="min-h-screen bg-[#0F0F0F] pt-20">
         {/* Hero Section */}
         <AboutHero />
-
-        {/* Highlights Strip */}
-        <AboutHighlights />
 
         {/* Story Sections */}
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

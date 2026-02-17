@@ -105,3 +105,29 @@ export async function getFeaturedGalleryImages(): Promise<GalleryPhoto[]> {
   const docs: SanityGalleryImage[] = await sanityClient.fetch(featuredGalleryQuery);
   return docs.map(toGalleryPhoto);
 }
+
+/**
+ * GROQ query for all gallery categories.
+ * Returns unique categories with slugs and titles.
+ */
+const categoriesQuery = /* groq */ `
+  *[_type == "category"] | order(title asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    "count": count(*[_type == "galleryImage" && references(^._id)])
+  }
+`;
+
+/**
+ * Fetch all gallery categories from Sanity.
+ */
+export async function getGalleryCategories(): Promise<{ id: string; label: string; slug: string; count: number }[]> {
+  const docs = await sanityClient.fetch(categoriesQuery);
+  return docs.map((doc: any) => ({
+    id: doc.slug ?? doc._id,
+    label: doc.title,
+    slug: doc.slug ?? doc._id,
+    count: doc.count ?? 0,
+  }));
+}

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import { Playfair_Display, Inter } from 'next/font/google';
 import { ToastProvider } from '@/components/ui';
+import { SplashScreen } from '@/components/layout';
 import AnalyticsListener from '@/components/AnalyticsListener';
 import { GA_MEASUREMENT_ID } from '@/lib/ga';
 import { SITE_URL, SITE_CONFIG, DEFAULT_IMAGES } from '@/lib/seoConfig';
@@ -133,6 +134,7 @@ export default function RootLayout({
       <body
         className={`${playfair.variable} ${inter.variable} font-sans antialiased bg-[#0F0F0F] text-white`}
       >
+        <SplashScreen />
         {/* Skip to main content link for keyboard users */}
         <a href="#main-content" className="skip-to-content">
           Skip to main content

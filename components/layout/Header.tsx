@@ -14,11 +14,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface NavLink {
   href: string;
   label: string;
+  hasSubmenu?: boolean;
+}
+
+interface GalleryCategory {
+  id: string;
+  label: string;
+  slug: string;
+  count: number;
 }
 
 const navLinks: NavLink[] = [
   { href: '/', label: 'Home' },
-  { href: '/gallery', label: 'Gallery' },
+  { href: '/gallery', label: 'Gallery', hasSubmenu: true },
   { href: '/blog', label: 'Blog' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
@@ -45,10 +53,23 @@ const menuItemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' as const } },
 };
 
+// Submenu animation variants
+const submenuVariants = {
+  hidden: { opacity: 0, height: 0, transition: { duration: 0.3, ease: 'easeInOut' as const } },
+  visible: { opacity: 1, height: 'auto', transition: { duration: 0.3, ease: 'easeInOut' as const } },
+};
+
+const submenuItemVariants = {
+  hidden: { opacity: 0, x: -10 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.2, ease: 'easeOut' as const } },
+};
+
 export default function Header() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
+  const [isGallerySubmenuOpen, setIsGallerySubmenuOpen] = useState(false);
+  const [categories, setCategories] = useState<GalleryCategory[]>([]);
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
 
@@ -109,7 +130,24 @@ export default function Header() {
     // We intentionally sync menu state with route changes here.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMenuOpen(false);
+    setIsGallerySubmenuOpen(false);
   }, [pathname]);
+
+  // Fetch gallery categories when menu opens
+  useEffect(() => {
+    if (isMenuOpen && categories.length === 0) {
+      console.log('Fetching gallery categories...');
+      fetch('/api/categories')
+        .then((res) => res.json())
+        .then((cats: GalleryCategory[]) => {
+          console.log('Categories fetched:', cats);
+          setCategories(cats);
+        })
+        .catch((error: Error) => {
+          console.error('Error fetching categories:', error);
+        });
+    }
+  }, [isMenuOpen, categories.length]);
 
   return (
     <>
@@ -179,17 +217,66 @@ export default function Header() {
             >
               <ul className="flex flex-col items-center space-y-12 md:space-y-16" role="menu">
                 {navLinks.map((link) => (
-                  <motion.li key={link.href} variants={menuItemVariants} role="none">
-                    <Link
-                      href={link.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className={`block min-h-[44px] min-w-[44px] text-center text-2xl font-light lowercase tracking-wide transition-colors duration-200 hover:text-[#DC2626] md:text-3xl ${
-                        isActive(link.href) ? 'text-[#DC2626]' : 'text-[#6B7280]'
-                      }`}
-                      role="menuitem"
-                    >
-                      {link.label.toLowerCase()}
-                    </Link>
+                  <motion.li key={link.href} variants={menuItemVariants} role="none" className="flex flex-col items-center">
+                    {link.hasSubmenu ? (
+                      <>
+                        <button
+                          onClick={() => setIsGallerySubmenuOpen(!isGallerySubmenuOpen)}
+                          className={`block min-h-[44px] min-w-[44px] text-center text-2xl font-light lowercase tracking-wide transition-colors duration-200 hover:text-[#DC2626] md:text-3xl ${
+                            isActive(link.href) ? 'text-[#DC2626]' : 'text-[#6B7280]'
+                          }`}
+                          role="menuitem"
+                          aria-expanded={isGallerySubmenuOpen}
+                        >
+                          {link.label.toLowerCase()}
+                        </button>
+                        <AnimatePresence>
+                          {isGallerySubmenuOpen && (
+                            <motion.ul
+                              variants={submenuVariants}
+                              initial="hidden"
+                              animate="visible"
+                              exit="hidden"
+                              className="mt-4 flex flex-col items-center space-y-3 overflow-hidden"
+                            >
+                              <motion.li variants={submenuItemVariants}>
+                                <Link
+                                  href="/gallery"
+                                  onClick={() => setIsMenuOpen(false)}
+                                  className={`block text-base font-light lowercase tracking-wide transition-colors duration-200 hover:text-[#DC2626] md:text-lg ${
+                                    pathname === '/gallery' && !pathname.includes('?') ? 'text-[#DC2626]' : 'text-[#6B7280]/80'
+                                  }`}
+                                >
+                                  all
+                                </Link>
+                              </motion.li>
+                              {categories.map((category) => (
+                                <motion.li key={category.id} variants={submenuItemVariants}>
+                                  <Link
+                                    href={`/gallery?category=${category.slug}`}
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className="block text-base font-light lowercase tracking-wide text-[#6B7280]/80 transition-colors duration-200 hover:text-[#DC2626] md:text-lg"
+                                  >
+                                    {category.label.toLowerCase()}
+                                  </Link>
+                                </motion.li>
+                              ))}
+                            </motion.ul>
+                          )}
+                        </AnimatePresence>
+                      </>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={`block min-h-[44px] min-w-[44px] text-center text-2xl font-light lowercase tracking-wide transition-colors duration-200 hover:text-[#DC2626] md:text-3xl ${
+                          isActive(link.href) ? 'text-[#DC2626]' : 'text-[#6B7280]'
+                        }`}
+                        role="menuitem"
+                      >
+                        {link.label.toLowerCase()}
+                      </Link>
+                    )}
                   </motion.li>
                 ))}
               </ul>
