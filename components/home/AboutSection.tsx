@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Award, Camera, MapPin, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { AnimatedSection } from '@/components/animated';
 
 /**
@@ -67,28 +67,6 @@ export default function AboutSection() {
                 and numerous international publications. What drives me is the profound connection
                 between humanity and the natural world.
               </p>
-            </div>
-
-            {/* Highlights */}
-            <div className="mt-8 grid gap-4 sm:grid-cols-3">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 backdrop-blur-xl">
-                  <Camera className="h-5 w-5 text-[#DC2626]" />
-                </div>
-                <span className="text-sm text-[#F5F5F5]/70">National Geographic</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 backdrop-blur-xl">
-                  <Award className="h-5 w-5 text-[#DC2626]" />
-                </div>
-                <span className="text-sm text-[#F5F5F5]/70">Award Winner</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 backdrop-blur-xl">
-                  <MapPin className="h-5 w-5 text-[#DC2626]" />
-                </div>
-                <span className="text-sm text-[#F5F5F5]/70">Punjab, India</span>
-              </div>
             </div>
 
             {/* CTA */}

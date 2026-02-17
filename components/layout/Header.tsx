@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -191,6 +192,22 @@ export default function Header() {
           </div>
         </button>
       </header>
+
+      {/* Logo (Top-Right) */}
+      <div
+        className={`fixed top-6 right-6 z-50 flex h-11 items-center transition-transform duration-300 ${isHidden && !isMenuOpen ? '-translate-y-24' : 'translate-y-0'}`}
+      >
+        <Link href="/" className="block">
+          <Image
+            src="/logo-black.svg"
+            alt="Logo"
+            width={156}
+            height={156}
+            priority
+            className="h-21 w-auto sm:h-26 md:h-32 object-contain brightness-0 invert"
+          />
+        </Link>
+      </div>
 
       {/* Fullscreen Menu Overlay */}
       <AnimatePresence>
